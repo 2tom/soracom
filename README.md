@@ -1,4 +1,4 @@
-WiFi利用時のSORACOMの有効化
+WiFi利用時のSORACOM設定
 =======
 
 
@@ -69,20 +69,25 @@ Modem = /dev/ttyUSB2
 APN = soracom.io
 Username = sora
 Password = sora
+```
 
-8. 接続用スクリプトダウンロード
+
+## 設定
+
+```
+1. 接続用スクリプトダウンロード
 $ git clone https://github.com/2tom/soracom.git
 
 $ cd soracom
 $ chmod +x *.sh soracomair
 $ ls -l
--rw-r--r-- 1 pi pi 2325  *月  * **:** README.md
+-rw-r--r-- 1 pi pi 2399  *月  * **:** README.md
 -rwxr-xr-x 1 pi pi  551  *月  * **:** change_gw.sh
 -rwxr-xr-x 1 pi pi  994  *月  * **:** connect_air.sh
 -rwxr-xr-x 1 pi pi 1768  *月  * **:** soracomair
 
 $ ./soracomair start
 
-9. soracom無効化
+2. soracom無効化
 $ ./soracomair stop
 ```
