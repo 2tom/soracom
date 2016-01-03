@@ -51,7 +51,7 @@ IMEI: 356360043384278
 $ ssh pi@***.***.***.***
 
 
-7. wvdialの接続設定
+8. wvdialの接続設定
 $ sudo vi /etc/wvdial.conf
 [Dialer Defaults]
 Init1 = ATZ
