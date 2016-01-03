@@ -1,0 +1,64 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          soracomair
+# Required-Start:    $remote_fs $syslog 
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Example initscript
+# Description:       This file should be used to construct scripts to be
+#                    placed in /etc/init.d.  This example start a
+#                    single forking daemon capable of writing a pid
+#                    file.  To get other behavoirs, implemend
+#                    do_start(), do_stop() or other functions to
+#                    override the defaults in /lib/init/init-d-script.
+### END INIT INFO
+
+#SORACOM Air接続スクリプトのフルパスを設定
+cmd="/home/pi/soracom/connect_air.sh"
+cmd2="/home/pi/soracom/change_gw.sh"
+
+start(){
+    #working  /home/pi/soracom/connect_air.sh
+    echo -n "connect air...\n"
+    #スクリプトの実行
+    bash $cmd &
+
+    sleep 10
+
+    #default gw 変更
+    echo -n "change default gw [wlan0 -> ppp0]...\n"
+    echo "**********"
+    ifconfig ppp0 > /dev/null 2>&1 && bash $cmd2 change
+    return 0
+}
+
+stop(){
+    echo -n "stopping connect air...\n"
+    #スクリプトが実行されているプロセスのPIDを設定
+    pid=`ps ax | grep -v grep | grep "$cmd" | awk '{ print $1 }'`
+    #スクリプトの停止
+    sudo kill $pid
+    #ダイヤラーwvdialの停止 pppdも停止する
+    sudo killall wvdial
+
+    sleep 5
+
+    echo -n "reset default gw [ppp0 -> wlan0]...\n"
+    bash $cmd2 reset
+
+    return 0
+}
+
+case $1 in
+    start)
+        start
+                        ;;
+        stop)
+                stop
+                        ;;
+        *)
+               echo "Usage: $0 {start|stop}"
+               exit 2
+                        ;;
+esac
